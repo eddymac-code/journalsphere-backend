@@ -35,4 +35,20 @@ public class Reaction {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }

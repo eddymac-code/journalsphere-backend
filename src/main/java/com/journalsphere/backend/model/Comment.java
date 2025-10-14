@@ -36,4 +36,16 @@ public class Comment {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
 }

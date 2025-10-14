@@ -31,6 +31,11 @@ public class PostService {
         return postRepository.findById(id);
     }
 
+    // get posts by author id
+    public List<Post> getByAuthorId(Long authorId){
+        return postRepository.findByAuthorId(authorId);
+    }
+
     // delete
     public void delete(Long id){
         postRepository.deleteById(id);
