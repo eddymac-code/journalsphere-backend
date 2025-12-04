@@ -24,6 +24,9 @@ public class User {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
     public String getUsername() {
         return username;
     }
@@ -43,4 +46,8 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getPassword() { return password; }
+
+    public Long getId() { return id; }
 }
