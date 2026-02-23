@@ -38,7 +38,8 @@ type Query {
 }
 
 type Mutation {
-    createPost(title: String!, content: String!, authorId: ID!): Post
+#    createPost(title: String!, content: String!, authorId: ID!): Post
+    createPost(title: String!, content: String!): Post
     createComment(content: String!, postId: ID!, authorId: ID!): Comment
     reactToPost(postId: ID!, userId: ID!, type: String!): Reaction
 }

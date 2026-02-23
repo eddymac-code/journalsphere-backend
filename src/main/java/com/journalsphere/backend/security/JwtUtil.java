@@ -5,11 +5,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
     private final Key key;
     private final long expirationMs;
@@ -22,12 +24,12 @@ public class JwtUtil {
         this.expirationMs = expirationMs;
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String email) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
-                .subject(username)
+                .subject(email)
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(key)

@@ -2,10 +2,14 @@ package com.journalsphere.backend.graphql.mutation;
 
 import com.journalsphere.backend.model.Post;
 import com.journalsphere.backend.model.User;
+import com.journalsphere.backend.security.CustomUserDetails;
 import com.journalsphere.backend.service.PostService;
 import com.journalsphere.backend.service.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -22,9 +26,23 @@ public class PostMutationResolver {
     public Post createPost(
             @Argument String title,
             @Argument String content,
-            @Argument String authorId
-    ){
-        User author = userService.getById(Long.parseLong(authorId)).orElseThrow(() -> new RuntimeException("User not found"));
+            @AuthenticationPrincipal CustomUserDetails userDetails
+            ){
+
+        // Extract authentication from JWT
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        String username = userDetails.getUsername();
+
+        User author = userService
+                .findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         Post post = new Post();
         post.setTitle(title);

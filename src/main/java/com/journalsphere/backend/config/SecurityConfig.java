@@ -52,21 +52,48 @@ public class SecurityConfig {
 //        return http.build();
 //    }
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtUtil, userDetailsService);
+//
+//        http
+//                .csrf(csrf -> csrf.disable()) // for APIs, handle carefully in prod
+//                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/auth/**", "/h2-console/**", "/actuator/**").permitAll()
+//                        .requestMatchers("/graphql").permitAll() // allow public read queries maybe, adjust later
+//                        .anyRequest().authenticated()
+//                )
+//                .headers(headers -> headers.frameOptions().disable()) // to allow H2 console
+//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+//
+//        return http.build();
+//    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtUtil, userDetailsService);
 
         http
-                .csrf(csrf -> csrf.disable()) // for APIs, handle carefully in prod
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(csrf -> csrf.disable())
+
+                .cors(cors -> {})   // ADD THIS LINE
+
+                .sessionManagement(sess ->
+                        sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/h2-console/**", "/actuator/**").permitAll()
-                        .requestMatchers("/graphql").permitAll() // allow public read queries maybe, adjust later
+                        .requestMatchers("/graphql").permitAll()
                         .anyRequest().authenticated()
                 )
-                .headers(headers -> headers.frameOptions().disable()) // to allow H2 console
+
+                .headers(headers -> headers.frameOptions().disable())
+
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 }
